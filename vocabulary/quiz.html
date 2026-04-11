@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabulary Quiz</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f4f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .screen { display: none; width: 100%; max-width: 680px; padding: 32px 24px; }
+    .screen.active { display: block; }
+
+    /* ── HOME ── */
+    #home { text-align: center; }
+    #home h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .subtitle { color: #777; font-size: 1rem; margin-bottom: 40px; }
+
+    .status-box {
+      background: white;
+      border-radius: 14px;
+      padding: 28px 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .status-loading { color: #aaa; font-size: 1rem; }
+    .status-ok { color: #2a8a4a; font-size: 1rem; font-weight: 500; }
+    .status-ok span { display: block; color: #888; font-size: 0.85rem; font-weight: 400; margin-top: 4px; }
+    .status-err { color: #c04040; font-size: 0.9rem; line-height: 1.5; }
+    .status-err code { background: #f5f0f0; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
+
+    .quiz-size-label { font-size: 0.82rem; color: #aaa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
+    .size-buttons { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+    .size-btn {
+      padding: 10px 28px; border: 2px solid #ddd; background: white;
+      border-radius: 40px; font-size: 1rem; cursor: pointer;
+      transition: all .15s; font-weight: 500;
+    }
+    .size-btn:hover { border-color: #555; }
+    .size-btn.selected { border-color: #1a1a1a; background: #1a1a1a; color: white; }
+
+    .btn-primary {
+      background: #1a1a1a; color: white; border: none;
+      padding: 14px 40px; border-radius: 40px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: opacity .15s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ── QUIZ ── */
+    #quiz { text-align: center; }
+
+    .progress-bar-wrap { height: 4px; background: #e0dedd; border-radius: 4px; margin-bottom: 32px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: #1a1a1a; border-radius: 4px; transition: width .4s ease; }
+    .progress-label { font-size: 0.85rem; color: #aaa; margin-bottom: 48px; }
+
+    .word-card {
+      background: white; border-radius: 20px; padding: 56px 40px;
+      margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .word-display { font-size: 2.4rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+    .word-phonetics { font-size: 1rem; color: #aaa; font-style: italic; margin-bottom: 6px; }
+    .word-pos {
+      display: inline-block; font-size: 0.78rem; color: #888;
+      background: #f0efed; padding: 3px 10px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+
+    .reveal-panel {
+      text-align: left; background: white; border-radius: 20px;
+      padding: 28px 32px; margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06); display: none;
+    }
+    .reveal-panel.shown { display: block; }
+
+    .section-label {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px;
+      color: #aaa; margin-bottom: 6px; margin-top: 18px;
+    }
+    .section-label:first-child { margin-top: 0; }
+
+    .definition { font-size: 1rem; line-height: 1.6; color: #222; }
+
+    .examples { list-style: none; padding: 0; }
+    .examples li {
+      font-size: 0.93rem; color: #444; line-height: 1.55;
+      padding-left: 14px; position: relative; margin-bottom: 6px;
+    }
+    .examples li::before { content: '"'; position: absolute; left: 0; color: #bbb; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { background: #f0efed; color: #555; font-size: 0.82rem; padding: 4px 12px; border-radius: 20px; }
+    .tag.antonym { background: #fdf0f0; color: #c0404a; }
+
+    .memory-tip {
+      font-size: 0.93rem; color: #555; line-height: 1.6;
+      background: #fffbea; border-left: 3px solid #f5c842;
+      padding: 10px 14px; border-radius: 0 8px 8px 0;
+    }
+    .teacher-note { font-size: 0.9rem; color: #555; line-height: 1.6; font-style: italic; }
+
+    .quiz-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-reveal {
+      background: #1a1a1a; color: white; border: none;
+      padding: 14px 40px; border-radius: 40px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: opacity .15s;
+    }
+    .btn-reveal:hover { opacity: 0.85; }
+
+    .btn-next {
+      background: #1a1a1a; color: white; border: none;
+      padding: 14px 40px; border-radius: 40px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: opacity .15s;
+    }
+    .btn-next:hover { opacity: 0.85; }
+
+    .btn-secondary {
+      background: white; color: #555; border: 2px solid #ddd;
+      padding: 12px 28px; border-radius: 40px; font-size: 0.9rem;
+      font-weight: 500; cursor: pointer; transition: all .15s;
+    }
+    .btn-secondary:hover { border-color: #aaa; color: #333; }
+
+    /* ── DONE ── */
+    #done { text-align: center; }
+    #done .emoji { font-size: 3rem; margin-bottom: 16px; }
+    #done h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+    #done .done-sub { color: #888; margin-bottom: 32px; font-size: 0.95rem; }
+
+    .words-covered {
+      background: white; border-radius: 16px; padding: 24px 28px;
+      margin-bottom: 32px; text-align: left; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .words-covered h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 14px; }
+    .covered-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .covered-word { background: #f0efed; color: #333; font-size: 0.88rem; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <h1>📚 Vocabulary Quiz</h1>
+  <p class="subtitle">Test yourself on the words you've been learning</p>
+
+  <div class="status-box">
+    <div class="status-loading" id="status-msg">Loading vocabulary.json…</div>
+  </div>
+
+  <div class="quiz-size-label">Quiz size</div>
+  <div class="size-buttons">
+    <button class="size-btn selected" data-n="5">5</button>
+    <button class="size-btn" data-n="10">10</button>
+    <button class="size-btn" data-n="20">20</button>
+  </div>
+
+  <button class="btn-primary" id="start-btn" disabled>Start Quiz</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="progress-label" id="progress-label">Word 1 of 10</div>
+
+  <div class="word-card">
+    <div class="word-display" id="q-word">—</div>
+    <div class="word-phonetics" id="q-phonetics"></div>
+    <span class="word-pos" id="q-pos"></span>
+  </div>
+
+  <div class="reveal-panel" id="reveal-panel">
+    <div class="section-label">Definition</div>
+    <div class="definition" id="q-def"></div>
+
+    <div class="section-label">Examples</div>
+    <ul class="examples" id="q-examples"></ul>
+
+    <div class="section-label">Memory tip 💡</div>
+    <div class="memory-tip" id="q-tip"></div>
+
+    <div class="section-label">Teacher's note</div>
+    <div class="teacher-note" id="q-note"></div>
+
+    <div class="section-label">Synonyms</div>
+    <div class="tags" id="q-synonyms"></div>
+
+    <div class="section-label">Antonyms</div>
+    <div class="tags" id="q-antonyms"></div>
+  </div>
+
+  <div class="quiz-actions">
+    <button class="btn-reveal" id="btn-reveal">Reveal ↓</button>
+    <button class="btn-next" id="btn-next" style="display:none">Next word →</button>
+    <button class="btn-secondary" id="btn-quit">Quit</button>
+  </div>
+</div>
+
+<!-- DONE -->
+<div id="done" class="screen">
+  <div class="emoji">🎉</div>
+  <h2>Quiz complete!</h2>
+  <p class="done-sub" id="done-sub"></p>
+
+  <div class="words-covered">
+    <h4>Words you reviewed</h4>
+    <div class="covered-list" id="covered-list"></div>
+  </div>
+
+  <p style="color:#888; font-size:.9rem; margin-bottom:24px">
+    Come back tomorrow — spaced repetition is the secret to remembering!
+  </p>
+  <button class="btn-primary" id="btn-restart">Quiz again</button>
+</div>
+
+<script>
+  let words = [], quizWords = [], current = 0, quizSize = 5;
+
+  // ── Auto-load vocabulary.json from same directory (works when served via HTTP)
+  fetch('./vocabulary.json')
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(data => {
+      if (!Array.isArray(data) || data.length === 0) throw new Error('empty');
+      words = data;
+      document.getElementById('status-msg').innerHTML =
+        `<span class="status-ok">✅ vocabulary.json loaded<span>${words.length} word${words.length !== 1 ? 's' : ''} ready</span></span>`;
+      document.getElementById('start-btn').disabled = false;
+    })
+    .catch(err => {
+      document.getElementById('status-msg').innerHTML =
+        `<span class="status-err">
+          Could not load <code>vocabulary.json</code>.<br>
+          Make sure you opened this page via <code>serve.py</code>, not directly from Finder.
+        </span>`;
+    });
+
+  // ── Size buttons
+  document.querySelectorAll('.size-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      quizSize = parseInt(btn.dataset.n);
+    });
+  });
+
+  // ── Start / restart
+  document.getElementById('start-btn').addEventListener('click', startQuiz);
+  document.getElementById('btn-restart').addEventListener('click', () => show('home'));
+
+  function startQuiz() {
+    const n = Math.min(quizSize, words.length);
+    quizWords = shuffle([...words]).slice(0, n);
+    current = 0;
+    show('quiz');
+    renderWord();
+  }
+
+  function renderWord() {
+    const w = quizWords[current];
+    const total = quizWords.length;
+
+    document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
+    document.getElementById('progress-label').textContent = `Word ${current + 1} of ${total}`;
+
+    document.getElementById('q-word').textContent = w.word;
+    document.getElementById('q-phonetics').textContent = w.phonetics || '';
+    document.getElementById('q-pos').textContent = w.part_of_speech || '';
+
+    document.getElementById('reveal-panel').classList.remove('shown');
+    document.getElementById('q-def').textContent = w.definition || '';
+
+    const exUl = document.getElementById('q-examples');
+    exUl.innerHTML = '';
+    (w.example_sentences || []).forEach(s => {
+      const li = document.createElement('li'); li.textContent = s; exUl.appendChild(li);
+    });
+
+    setTags('q-synonyms', w.synonyms || [], false);
+    setTags('q-antonyms', w.antonyms || [], true);
+
+    document.getElementById('q-tip').textContent = w.memory_tip || '';
+    document.getElementById('q-note').textContent = w.usage_notes || '';
+
+    document.getElementById('btn-reveal').style.display = 'inline-block';
+    document.getElementById('btn-next').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setTags(id, arr, isAntonym) {
+    const div = document.getElementById(id);
+    div.innerHTML = '';
+    arr.forEach(s => {
+      const t = document.createElement('span');
+      t.className = 'tag' + (isAntonym ? ' antonym' : '');
+      t.textContent = s;
+      div.appendChild(t);
+    });
+  }
+
+  document.getElementById('btn-reveal').addEventListener('click', () => {
+    document.getElementById('reveal-panel').classList.add('shown');
+    document.getElementById('btn-reveal').style.display = 'none';
+    document.getElementById('btn-next').style.display = 'inline-block';
+  });
+
+  document.getElementById('btn-next').addEventListener('click', nextWord);
+  document.getElementById('btn-quit').addEventListener('click', () => show('home'));
+
+  function nextWord() {
+    current++;
+    if (current >= quizWords.length) endQuiz();
+    else renderWord();
+  }
+
+  function endQuiz() {
+    const n = quizWords.length;
+    document.getElementById('done-sub').textContent =
+      `You reviewed ${n} word${n !== 1 ? 's' : ''} today.`;
+    const list = document.getElementById('covered-list');
+    list.innerHTML = '';
+    quizWords.forEach(w => {
+      const s = document.createElement('span');
+      s.className = 'covered-word'; s.textContent = w.word; list.appendChild(s);
+    });
+    show('done');
+  }
+
+  // ── Enter key: reveal → next
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    if (!document.getElementById('quiz').classList.contains('active')) return;
+    const reveal = document.getElementById('btn-reveal');
+    const next   = document.getElementById('btn-next');
+    if (reveal.style.display !== 'none') reveal.click();
+    else if (next.style.display !== 'none') next.click();
+  });
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+</script>
+</body>
+</html>

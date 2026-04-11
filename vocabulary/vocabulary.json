@@ -1,0 +1,104 @@
+[
+  {
+    "word": "curate",
+    "phonetics": "/ˈkjʊər.eɪt/",
+    "part_of_speech": "verb",
+    "definition": "To carefully select, organize, and present a collection of things — choosing only what's most valuable, relevant, or meaningful from a larger pool. It implies taste, judgment, and intentionality, not just gathering.",
+    "example_sentences": [
+      "She curated a playlist for the road trip.",
+      "The director curated an exhibition featuring works from twelve countries around a single theme."
+    ],
+    "synonyms": [
+      "handpick",
+      "select",
+      "assemble",
+      "edit",
+      "compile"
+    ],
+    "antonyms": [
+      "collect indiscriminately",
+      "hoard",
+      "dump"
+    ],
+    "usage_notes": "Exploded in everyday usage in the digital age — people now curate social media feeds, playlists, newsletters, even outfits. One common mistake: overusing it for simple gathering. Reserve it for situations where selective judgment is the point. Noun form: curation; the person: curator.",
+    "memory_tip": "Think of a museum curator — someone whose whole job is deciding what's worth showing and what stays in the basement. When you curate anything, you're being that curator: a gatekeeper of quality.",
+    "added_date": "2026-04-10"
+  },
+  {
+    "word": "facilitate",
+    "phonetics": "/fəˈsɪl.ɪ.teɪt/",
+    "part_of_speech": "verb",
+    "definition": "To make a process, action, or outcome easier or smoother — often by removing obstacles, providing support, or helping things move forward without doing the work yourself.",
+    "example_sentences": [
+      "The manager's job was to facilitate, not to micromanage.",
+      "The new software was designed to facilitate collaboration between remote teams across different time zones."
+    ],
+    "synonyms": [
+      "enable",
+      "assist",
+      "streamline",
+      "support",
+      "expedite"
+    ],
+    "antonyms": [
+      "hinder",
+      "obstruct",
+      "complicate",
+      "impede"
+    ],
+    "usage_notes": "Common in business, education, and formal writing. A facilitator runs workshops or meetings without imposing their own views — they guide the process, not the outcome. Don't confuse with 'enable' (more neutral) or 'allow' (more passive). 'Facilitate' implies active effort to smooth the way.",
+    "memory_tip": "The root is Latin 'facilis' — easy. To facilitate is literally to make something easy. Think: facility (a place that makes things easy to do) shares the same root.",
+    "added_date": "2026-04-10"
+  },
+  {
+    "word": "comprise",
+    "phonetics": "/kəmˈpraɪz/",
+    "part_of_speech": "verb",
+    "definition": "To be made up of; to consist of. The whole comprises its parts — the larger thing contains or includes the smaller elements within it.",
+    "example_sentences": [
+      "The committee comprises five elected members.",
+      "The course comprises twelve weekly lectures, three written assignments, and a final exam worth half the grade."
+    ],
+    "synonyms": [
+      "consist of",
+      "include",
+      "contain",
+      "encompass",
+      "make up"
+    ],
+    "antonyms": [
+      "exclude",
+      "omit",
+      "lack"
+    ],
+    "usage_notes": "One of the most commonly misused words in English. The whole comprises the parts — never 'comprised of'. Wrong: 'The team is comprised of five players.' Right: 'The team comprises five players' or 'is composed of five players.' Avoid 'comprised of' in formal writing entirely.",
+    "memory_tip": "The whole COMPRISES the parts — just like a container contains what's inside it. The big thing does the comprising, never the small parts.",
+    "added_date": "2026-04-10"
+  },
+  {
+    "word": "integrity",
+    "phonetics": "/ɪnˈteg.rɪ.ti/",
+    "part_of_speech": "noun",
+    "definition": "The quality of being honest and having strong moral principles — doing the right thing even when no one is watching. Also refers to the state of being whole, complete, and uncorrupted (e.g., structural integrity).",
+    "example_sentences": [
+      "She acted with integrity even when it cost her.",
+      "He turned down the bribe without hesitation, knowing his integrity was worth more than any short-term gain."
+    ],
+    "synonyms": [
+      "honesty",
+      "uprightness",
+      "principles",
+      "virtue",
+      "decency"
+    ],
+    "antonyms": [
+      "dishonesty",
+      "corruption",
+      "deceit",
+      "hypocrisy"
+    ],
+    "usage_notes": "Used in two main contexts: moral (honesty, ethical wholeness) and technical (data integrity, structural integrity). In everyday speech it almost always means the moral sense. Common collocations: 'act with integrity', 'a person of integrity', 'compromise one's integrity.' A compliment that carries real weight — don't overuse it casually.",
+    "memory_tip": "Think of 'integer' — a whole number, nothing missing, nothing broken. Integrity means you are whole and undivided: your actions match your values, every time.",
+    "added_date": "2026-04-11"
+  }
+]
